@@ -10,7 +10,7 @@ public class ButtonMaker extends JButton {
         JButton button = new JButton(text);
         button.setIcon(icon);
         button.setPreferredSize(new Dimension(150, 30));
-        button.setBackground(org.project10.global.ControlColors.getLightButtonForeground());
+        button.setBackground(new Color(34, 0, 0, 90));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.setForeground(Color.WHITE);
         button.addMouseListener(new MouseListener() {

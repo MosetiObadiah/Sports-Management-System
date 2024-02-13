@@ -1,7 +1,8 @@
 package org.project10.global;
 
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import net.miginfocom.swing.MigLayout;
 import org.project10.componentMaker.ButtonMaker;
 import org.project10.componentMaker.LabelMaker;
@@ -36,6 +37,8 @@ public class WelcomePage extends JPanel implements ActionListener {
     }
 
     private void init() {
+        //TODO  fix the low stock notification
+        org.project10.global.DashBoard.adminHasReachedDashboard = false;
         addMouseListener(new OutsideClickListener());
         setLayout(new BorderLayout());
         setBackground(new Color(84, 100, 125));
@@ -57,6 +60,7 @@ public class WelcomePage extends JPanel implements ActionListener {
         topPanel.setPreferredSize(new Dimension(1208, 38));
 
         JLabel maringoLabel = LabelMaker.createLabel("Maringo", null);
+        maringoLabel.setFont(new Font("Arial", Font.BOLD, 24));
         changeThemeBtn = new JToggleButton("theme");
         changeThemeBtn.addActionListener(this);
         exploreBtn = ButtonMaker.createButton("explore", null);
@@ -152,13 +156,7 @@ public class WelcomePage extends JPanel implements ActionListener {
             //debug
             System.out.println("change theme");
 
-            UIManager.removeAuxiliaryLookAndFeel(new FlatLightLaf());
-            try {
-                UIManager.setLookAndFeel(new FlatMacDarkLaf());
-            } catch (UnsupportedLookAndFeelException e) {
-                throw new RuntimeException(e);
-            }
-            SwingUtilities.updateComponentTreeUI(this);
+            toggleTheme();
         }
         if (actionEvent.getSource() == aboutBtn) {
             showJOptionPaneWithTimer("Maringo Sports is a system that helps you manage your sports team", "About", JOptionPane.INFORMATION_MESSAGE, 3);
@@ -186,6 +184,32 @@ public class WelcomePage extends JPanel implements ActionListener {
             loginBtn.setVisible(true);
         }
     }
+
+    private void toggleTheme() {
+        if (changeThemeBtn.isSelected()) {
+            applyDarkTheme();
+        } else {
+            applyLightTheme();
+        }
+        FlatLaf.updateUI();
+    }
+
+
+    private void applyDarkTheme() {
+        try {
+            UIManager.setLookAndFeel(new FlatMacDarkLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    private void applyLightTheme() {
+        UIManager.removeAuxiliaryLookAndFeel(new FlatMacLightLaf());
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+
     private void gotoWhichUser() throws ClassNotFoundException, SQLException {
         Statement statement;
         Connection connection = null;
@@ -194,7 +218,7 @@ public class WelcomePage extends JPanel implements ActionListener {
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/maringodb", "moseti", "tajiri01");
+            connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/project10", "moseti", "tajiri01");
 
             String query = "SELECT username, password, accountType FROM MembersTable";
             statement = connection.createStatement();
@@ -216,18 +240,7 @@ public class WelcomePage extends JPanel implements ActionListener {
 
                     if (userTypeonLogin.equals(accountType4romdb)) {
                         Frame mainframe = (Frame) SwingUtilities.getWindowAncestor(WelcomePage.this);
-                        switch (userTypeonLogin) {
-                            case "Admin" -> {
-                                mainframe.switchPanel(new DashBoard());
-                            }
-                            case "Captain", "User" -> {
-                                //mainframe.switchPanel(new DashBoardUser(userTypeonLogin));
-                            }
-                            case "Patron" -> {
-                                //mainframe.switchPanel(new DashBoardPatron());
-                            }
-                        }
-                        break;
+                        mainframe.switchPanel(new DashBoard(accountType4romdb));
                     }
                 }
             }
