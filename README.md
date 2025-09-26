@@ -28,25 +28,18 @@ With this system, you can improve your sports organization's efficiency, reduce 
 
 - **Player Performance Tracking**: Monitor and track player progress, including stats, achievements, and improvements over time.
 
-- **Reporting**: Generate reports on player data, team performance, and financial information. Gain insights into your sports organization's performance.
-
-- **Payment and Billing**: Handle payments, dues, and fees for participation, equipment, and events. Keep financial records organized.
-
-- **Customization**: Customize the system to match your organization's branding and requirements.
-
 ## Getting Started
 
 ### Prerequisites
 Before you start using the Sports Management System, ensure you have the following:
 
 -JDK 21 or later
-- PHP (version 7.0 or later) and a MySQL database.
+- MySQL database.
 
 ### Installation
 1. Clone this repository to your web server or hosting environment.
 2. Create a MySQL database and import the provided database schema (found in the `database` directory).
-3. Update the `config.php` file with your database connection details and other settings.
-4. compile and run the project or use the JAR
+3. compile and run the project or use the JAR
 
 ## Usage
 Once the system is installed and configured, you can start using it to manage your sports organization. Log in as an administrator (default username admin, password admin)to set up users, teams, schedules, and other essential information. Patron, players, and administrators can then log in with their respective accounts to access relevant features and stay updated on the latest events.
